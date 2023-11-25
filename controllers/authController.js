@@ -105,3 +105,25 @@ exports.forgotPassword = catchAsyncError(async (req, res, next) => {
     return next(new AppError('There was an error sending the email! Try again later.', 500));
   }
 });
+
+exports.resetPassword = catchAsyncError(async (req, res, next) => {
+  const user = await User.findOne({ passwordResetToken: req.params.token, passwordResetExpires: { $gt: Date.now() } });
+
+  if (!user) return next(new AppError('Token is invalid or has expired', 400));
+
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+
+  user.passwordResetToken = undefined;
+  user.passwordResetExpires = undefined;
+
+  user.save();
+
+  const token = signToken(user._id);
+
+  res.status(201).json({
+    status: 'success!',
+    token,
+    data: { user },
+  });
+});
