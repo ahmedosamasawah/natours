@@ -54,7 +54,6 @@ module.exports = (err, req, res, next) => {
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
 
-    // console.log(err.message);
     if (error.name === 'MongoServerError') error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicatedFieldsDB(error);
     if (error._message === 'User validation failed') error = handleValidationErrorDB(error);
