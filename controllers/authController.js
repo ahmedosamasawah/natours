@@ -13,6 +13,17 @@ const signToken = (id) =>
 const createSendToken = (user, statusCode, response) => {
   const token = signToken(user._id);
 
+  const cookieOptions = {
+    expires: new Date(Date.now() + process.env.COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000),
+    httpOnly: true,
+  };
+
+  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+
+  response.cookie('jwt', token, cookieOptions);
+
+  user.password = undefined;
+
   response.status(statusCode).json({
     status: 'success!',
     token,
@@ -89,7 +100,7 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
 exports.updatePassword = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.user.id).select('+password');
 
-  if (!(await user.correctPassword(req.user.currentPassword, user.password)))
+  if (!(await user.correctPassword(req.body.currentPassword, user.password)))
     return next(new AppError('Your current password is wrong!', 401));
 
   user.password = req.body.newPassword;
