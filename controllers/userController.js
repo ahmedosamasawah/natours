@@ -1,4 +1,4 @@
-// const AppError = require('../utils/appError');
+const factory = require('./handlerFactory');
 const User = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsyncError = require('../utils/catchAsyncError');
@@ -12,17 +12,10 @@ const filterObj = (obj, ...targetFields) => {
   return filteredObj;
 };
 
-exports.getAllUsers = catchAsyncError(async (req, res, next) => {
-  const users = await User.find();
-
-  res.status(200).json({
-    status: 'success',
-    result: users.length,
-    data: {
-      users,
-    },
-  });
-});
+exports.getMyInfo = (req, res, next) => {
+  req.params.id = req.user.id;
+  next();
+};
 
 exports.updateUserData = catchAsyncError(async (req, res, next) => {
   if (req.body.password || req.body.passwordConfirm)
@@ -43,7 +36,7 @@ exports.updateUserData = catchAsyncError(async (req, res, next) => {
   });
 });
 
-exports.deleteUser = catchAsyncError(async (req, res, next) => {
+exports.deleteMyAccount = catchAsyncError(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
 
   res.status(200).json({
@@ -52,26 +45,14 @@ exports.deleteUser = catchAsyncError(async (req, res, next) => {
   });
 });
 
-exports.getOneUser = (req, res) => {
-  res.status(200).json({
-    status: 'success!',
-  });
-};
-
 exports.addNewUser = (req, res) => {
-  res.status(201).json({
-    status: 'user added successfully!',
+  res.status(500).json({
+    status: 'error!',
+    message: 'This route is not defined! Please use /signup instead!',
   });
 };
 
-exports.updateUser = (req, res) => {
-  res.json({
-    status: 'user updated successfully!',
-  });
-};
-
-exports.deleteOneUser = (req, res) => {
-  res.json({
-    status: 'user deleted successfully!',
-  });
-};
+exports.getUser = factory.getOne(User);
+exports.getAllUsers = factory.getAll(User);
+exports.updateUser = factory.updateOne(User);
+exports.deleteUser = factory.deleteOne(User);

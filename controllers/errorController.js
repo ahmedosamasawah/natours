@@ -54,11 +54,11 @@ module.exports = (err, req, res, next) => {
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
 
-    if (error.name === 'MongoServerError') error = handleCastErrorDB(error);
-    if (error.code === 11000) error = handleDuplicatedFieldsDB(error);
-    if (error._message === 'User validation failed') error = handleValidationErrorDB(error);
     if (error.name === 'JsonWebTokenError') error = handleJWTError();
+    if (error.code === 11000) error = handleDuplicatedFieldsDB(error);
     if (error.name === 'TokenExpiredError') error = handleJWTExpiredError();
+    if (error.name === 'MongoServerError') error = handleCastErrorDB(error);
+    if (error._message === 'User validation failed') error = handleValidationErrorDB(error);
 
     sendErrorProd(error, res);
   }
