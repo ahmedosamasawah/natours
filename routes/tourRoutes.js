@@ -14,6 +14,9 @@ router
   .get(tourController.getAllTours)
   .post(authController.protect, authController.restrictTo('admin', 'lead-guide'), tourController.addNewTour);
 
+router.route('/tour-within/distances/:latlng/unit/:unit').get(tourController.getDistances);
+router.route('/tour-within/:distance/center/:latlng/unit/:unit').get(tourController.getTourWithin);
+
 router
   .route('/:id')
   .get(tourController.getOneTour)
