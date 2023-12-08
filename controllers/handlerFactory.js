@@ -9,7 +9,7 @@ exports.deleteOne = (Model) =>
     if (!document) return next(new AppError('No document found with that ID!', 404));
 
     res.status(204).json({
-      status: 'success!',
+      status: 'success',
       message: 'Document Deleted Successfully!',
     });
   });
@@ -24,7 +24,7 @@ exports.updateOne = (Model) =>
     if (!document) return next(new AppError('No document found with that ID!', 404));
 
     res.status(200).json({
-      status: 'success!',
+      status: 'success',
       data: {
         data: document,
       },
@@ -36,7 +36,7 @@ exports.addOne = (Model) =>
     const document = await Model.create(req.body);
 
     res.status(201).json({
-      status: 'success!',
+      status: 'success',
       data: {
         data: document,
       },
@@ -53,7 +53,7 @@ exports.getOne = (Model, popOptions) =>
     if (!document) return next(new AppError('No document found with that ID!', 404));
 
     res.status(200).json({
-      status: 'success!',
+      status: 'success',
       data: {
         data: document,
       },
@@ -71,7 +71,7 @@ exports.getAll = (Model) =>
     const document = await features.query;
 
     res.status(200).json({
-      status: 'success!',
+      status: 'success',
       result: document.length,
       data: {
         data: document,

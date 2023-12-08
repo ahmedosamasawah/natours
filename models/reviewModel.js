@@ -78,7 +78,6 @@ reviewSchema.post('save', function () {
 reviewSchema.pre(/^findOneAnd/, async function (next) {
   this.rev = await this.clone().findOne();
 
-  console.log(this.rev);
   next();
 });
 

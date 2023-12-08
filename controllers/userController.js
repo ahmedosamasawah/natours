@@ -29,7 +29,7 @@ exports.updateUserData = catchAsyncError(async (req, res, next) => {
   });
 
   res.status(200).json({
-    status: 'success!',
+    status: 'success',
     data: {
       users: updatedUser,
     },
@@ -40,14 +40,14 @@ exports.deleteMyAccount = catchAsyncError(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
 
   res.status(200).json({
-    status: 'success!',
+    status: 'success',
     message: 'User deleted successfully!',
   });
 });
 
 exports.addNewUser = (req, res) => {
   res.status(500).json({
-    status: 'error!',
+    status: 'error',
     message: 'This route is not defined! Please use /signup instead!',
   });
 };

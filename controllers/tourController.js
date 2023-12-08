@@ -24,7 +24,7 @@ exports.getTourWithin = catchAsyncError(async (req, res, next) => {
   });
 
   res.status(200).json({
-    status: 'success!',
+    status: 'success',
     results: tours.length,
     data: { tours },
   });
@@ -50,7 +50,7 @@ exports.getDistances = catchAsyncError(async (req, res, next) => {
   ]);
 
   res.status(200).json({
-    status: 'success!',
+    status: 'success',
     results: distances.length,
     data: { distances },
   });

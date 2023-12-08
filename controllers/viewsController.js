@@ -18,15 +18,13 @@ exports.getTour = catchAsyncError(async (req, res, next) => {
     fields: 'review rating user',
   });
 
-  console.log(tour);
-
   if (!tour) return next(new AppError('There is no tour with that name.', 404));
 
   res
     .status(200)
     .set(
       'Content-Security-Policy',
-      'connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com',
+      'connect-src https://*.tiles.mapbox.com https://api.mapbox.com https://events.mapbox.com http://127.0.0.1:3000',
     )
     .render('tour', {
       title: `${tour.name} Tour`,
